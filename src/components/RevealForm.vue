@@ -45,6 +45,21 @@
         </div>
       </label>
 
+      <!-- Password -->
+      <div class="field">
+        <label class="field-label">Contraseña</label>
+        <input
+          type="password"
+          v-model="password"
+          placeholder="Escribí la contraseña si el mensaje está protegido..."
+          :disabled="loading"
+          class="textarea"
+        />
+        <div class="field-hint">
+          <span>Solo si el mensaje fue ocultado con una contraseña</span>
+        </div>
+      </div>
+
       <!-- Submit -->
       <button type="submit" class="btn btn-primary btn-full" :disabled="loading || !file">
         <span v-if="loading" class="spinner"></span>
@@ -92,6 +107,7 @@ export default {
       file: null,
       fileName: "",
       imagePreview: null,
+      password: "",
       loading: false,
       error: "",
       revealedMessage: null,
@@ -159,6 +175,9 @@ export default {
 
       const formData = new FormData();
       formData.append("image", this.file);
+      if (this.password) {
+        formData.append("password", this.password);
+      }
 
       try {
         const response = await api.post("/reveal", formData);
